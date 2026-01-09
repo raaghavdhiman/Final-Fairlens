@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import MoneyAmount from "@/components/MoneyAmount";
+import StatusBadge from "@/components/StatusBadge";
 
 const API_URL = "http://localhost:3001";
 
@@ -47,17 +49,17 @@ export default function GovTenderDetailPage() {
 
   return (
     <div className="p-6 space-y-4">
-      <h1 className="text-2xl font-bold">{tender.title}</h1>
+      <h1 className="text-2xl font-semibold title-strong">{tender.title}</h1>
       <p className="text-gray-400">{tender.description}</p>
 
       <div className="space-y-1">
         <p>
           <span className="font-medium">Budget:</span>{" "}
-          {tender.budget ?? 0} ETH
+          <MoneyAmount eth={tender.budget} />
         </p>
         <p>
           <span className="font-medium">Status:</span>{" "}
-          {tender.status}
+          <StatusBadge status={tender.status} />
         </p>
       </div>
 

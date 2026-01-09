@@ -1,4 +1,6 @@
 import { ethToInr, formatInr } from "@/utils/currency";
+import MoneyAmount from "@/components/MoneyAmount";
+import Card from "@/components/Card";
 
 async function getVerification(id: string) {
   const res = await fetch(
@@ -36,64 +38,27 @@ export default async function MilestoneVerificationPage({
       </h1>
 
       {/* STATUS */}
-      <div
-        className={`mb-6 p-4 rounded border ${
-          data.verified
-            ? "border-green-500 bg-green-500/10"
-            : "border-red-500 bg-red-500/10"
-        }`}
-      >
-        <p
-          className={`font-semibold ${
-            data.verified ? "text-green-400" : "text-red-400"
-          }`}
-        >
-          {data.verified ? "✅ Payment Verified On-Chain" : "❌ Verification Failed"}
-        </p>
-      </div>
+      <Card className={`mb-6 ${data.verified ? "border-green-500 bg-green-500/10 text-green-400" : "border-red-500 bg-red-500/10 text-red-400"}`}>
+        <p className="font-semibold">{data.verified ? "✅ Payment Verified On-Chain" : "❌ Verification Failed"}</p>
+      </Card>
 
       {/* PAYMENT */}
-      <div className="mb-6 border border-gray-700 rounded p-4">
+      <Card className="mb-6 border-gray-700">
         <h2 className="font-semibold mb-2">Payment Details</h2>
 
-        <p className="text-sm text-gray-300">
-          Amount Paid:{" "}
-          <span className="font-medium">
-            {formatInr(paidInr)}
-          </span>{" "}
-          <span className="text-gray-500">
-            ({paidEth} ETH)
-          </span>
-        </p>
+        <p className="text-sm text-gray-300">Amount Paid: <MoneyAmount eth={paidEth} /></p>
 
-        <p className="text-xs text-gray-400 mt-2">
-          Transaction:
-          <a
-            href={`https://sepolia.etherscan.io/tx/${data.payment.txHash}`}
-            target="_blank"
-            className="text-blue-400 ml-2 break-all"
-          >
-            {data.payment.txHash}
-          </a>
-        </p>
-      </div>
+        <p className="text-xs text-gray-400 mt-2">Transaction: <a href={`https://sepolia.etherscan.io/tx/${data.payment.txHash}`} target="_blank" className="text-blue-400 ml-2 break-all">{data.payment.txHash}</a></p>
+      </Card>
 
       {/* CRYPTO PROOF */}
-      <div className="border border-gray-700 rounded p-4">
-        <h2 className="font-semibold mb-2">
-          Cryptographic Proof
-        </h2>
+      <Card className="border-gray-700">
+        <h2 className="font-semibold mb-2">Cryptographic Proof</h2>
 
-        <p className="text-xs text-gray-400 mb-2 break-all">
-          <span className="font-medium">Emitted Hash:</span>{" "}
-          {data.cryptographicProof.emittedHash}
-        </p>
+        <p className="text-xs text-gray-400 mb-2 break-all"><span className="font-medium">Emitted Hash:</span> {data.cryptographicProof.emittedHash}</p>
 
-        <p className="text-xs text-gray-400 break-all">
-          <span className="font-medium">Recomputed Hash:</span>{" "}
-          {data.cryptographicProof.recomputedHash}
-        </p>
-      </div>
+        <p className="text-xs text-gray-400 break-all"><span className="font-medium">Recomputed Hash:</span> {data.cryptographicProof.recomputedHash}</p>
+      </Card>
     </div>
   );
 }

@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { requireRole } from "@/lib/requireRole";
+import MoneyAmount from "@/components/MoneyAmount";
+import StatusBadge from "@/components/StatusBadge";
 
 type Tender = {
   id: string;
@@ -51,7 +53,7 @@ export default function MyTendersPage() {
   return (
     <div className="p-6 max-w-5xl mx-auto">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">My Tenders</h1>
+        <h1 className="text-2xl font-semibold title-strong">My Tenders</h1>
 
         <Link
           href="/gov/tenders/create"
@@ -72,18 +74,20 @@ export default function MyTendersPage() {
           <Link
             key={t.id}
             href={`/gov/tenders/${t.id}`}
-            className="block border border-gray-700 rounded p-4 hover:bg-gray-900 transition"
+            className="block border rounded p-4 hover:shadow-sm surface"
           >
-            <div className="flex justify-between mb-1">
-              <h2 className="font-semibold">{t.title}</h2>
-              <span className="text-sm text-gray-400">
-                {t.status}
-              </span>
-            </div>
+            <div className="flex justify-between items-start">
+              <div>
+                <h2 className="font-semibold text-[var(--text-primary)]">{t.title}</h2>
+              </div>
 
-            <p className="text-sm text-gray-400">
-              Budget: {t.budget} ETH
-            </p>
+              <div className="text-right">
+                <StatusBadge status={t.status} />
+                <div className="text-sm mt-2">
+                  <MoneyAmount eth={t.budget} />
+                </div>
+              </div>
+            </div>
           </Link>
         ))}
       </div>

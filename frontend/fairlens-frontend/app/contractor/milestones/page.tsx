@@ -2,6 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { requireRole } from "@/lib/requireRole";
+import MoneyAmount from "@/components/MoneyAmount";
+import StatusBadge from "@/components/StatusBadge";
+import Card from "@/components/Card";
 
 const API_URL = "http://localhost:3001";
 
@@ -66,8 +69,8 @@ export default function ContractorMilestonesPage() {
   }
 
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-6">
-      <h1 className="text-2xl font-bold">My Milestones</h1>
+    <div className="p-6 max-w-5xl mx-auto space-y-4 compact-vertical">
+      <h1 className="text-2xl font-semibold title-strong">My Milestones</h1>
 
       {milestones.length === 0 && (
         <p className="text-gray-400">
@@ -76,64 +79,37 @@ export default function ContractorMilestonesPage() {
       )}
 
       {milestones.map((m) => (
-        <div
-          key={m.id}
-          className="border border-gray-700 rounded p-4 space-y-2"
-        >
+        <Card key={m.id} className="space-y-2">
           <div className="flex justify-between">
             <h2 className="font-semibold">{m.description}</h2>
-            <span className="text-sm text-gray-400">
-              {m.tender?.title}
-            </span>
+            <span className="text-sm text-gray-400">{m.tender?.title}</span>
           </div>
 
-          <p className="text-sm text-gray-400">
-            Amount: {m.amount} ETH
-          </p>
+          <p className="text-sm text-gray-400">Amount: <MoneyAmount eth={m.amount} /></p>
 
-          <p>
-            Status:{" "}
-            <span className="font-medium">{m.status}</span>
-          </p>
+          <p>Status: <StatusBadge status={m.status} /></p>
 
-          {/* ACTIONS */}
-          <div className="flex gap-3 mt-3">
+          <div className="mt-3 border-t pt-3 flex justify-end items-center gap-2">
             {m.status === "PENDING" && (
-              <button
-                onClick={() => startWork(m.id)}
-                className="px-3 py-1 bg-blue-600 rounded hover:bg-blue-700"
-              >
-                Start Work
-              </button>
+              <button onClick={() => startWork(m.id)} className="px-3 py-1 text-sm bg-blue-600 rounded">Start Work</button>
             )}
 
             {m.status === "IN_PROGRESS" && (
-              <button
-                onClick={() => submitWork(m.id)}
-                className="px-3 py-1 bg-yellow-600 rounded hover:bg-yellow-700"
-              >
-                Submit Work
-              </button>
+              <button onClick={() => submitWork(m.id)} className="px-3 py-1 text-sm bg-yellow-600 rounded">Submit Work</button>
             )}
 
             {m.status === "COMPLETED" && !m.paidAt && (
-              <span className="text-yellow-400 text-sm">
-                ⏳ Awaiting government verification
-              </span>
+              <span className="text-yellow-400 text-sm">⏳ Awaiting government verification</span>
             )}
 
             {m.paidAt && (
-              <div className="text-green-500 text-sm space-y-1">
+              <div className="text-green-500 text-sm space-y-1 text-right">
                 <div>✅ Paid</div>
-                {m.paymentTxHash && (
-                  <div className="text-gray-400">
-                    Tx: {m.paymentTxHash.slice(0, 12)}...
-                  </div>
-                )}
+                {m.paymentTxHash && <div className="text-gray-400">Tx: {m.paymentTxHash.slice(0, 12)}...</div>}
               </div>
             )}
           </div>
-        </div>
+        </Card>
       ))}
     </div>
   );

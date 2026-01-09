@@ -45,60 +45,34 @@ export default function ContractorProfilePage() {
   const isVerified = Boolean(user.contractorHash);
 
   return (
-    <div className="p-8 max-w-3xl mx-auto space-y-6">
-      <h1 className="text-3xl font-bold">
+    <div className="p-8 max-w-3xl mx-auto space-y-4 compact-vertical">
+      <h1 className="text-3xl font-semibold title-strong">
         Contractor Profile
       </h1>
 
       {/* BASIC INFO */}
-      <div className="border p-4 rounded space-y-2">
-        <p>
-          <span className="font-medium">Name:</span>{" "}
-          {user.name}
-        </p>
-        <p>
-          <span className="font-medium">Email:</span>{" "}
-          {user.email}
-        </p>
-        <p>
-          <span className="font-medium">Wallet:</span>{" "}
-          {user.walletAddress ?? "Not linked"}
-        </p>
-      </div>
+      <Card className="space-y-2">
+        <p><span className="font-medium">Name:</span> {user.name}</p>
+        <p><span className="font-medium">Email:</span> {user.email}</p>
+        <p><span className="font-medium">Wallet:</span> {user.walletAddress ?? "Not linked"}</p>
+      </Card>
 
       {/* VERIFICATION STATUS */}
-      <div className="border p-4 rounded space-y-3">
-        <h2 className="text-xl font-semibold">
-          Verification Status
-        </h2>
+      <Card className="space-y-3">
+        <h2 className="text-xl font-semibold">Verification Status</h2>
 
         {isVerified ? (
           <>
-            <p className="text-green-500 font-medium">
-              ✅ Verified on Blockchain
-            </p>
+            <p className="text-green-500 font-medium">✅ Verified on Blockchain</p>
 
-            <p className="text-sm text-gray-400 break-all">
-              <span className="font-medium text-gray-300">
-                Contractor Hash:
-              </span>{" "}
-              {user.contractorHash}
-            </p>
+            <p className="text-sm text-gray-400 break-all"><span className="font-medium text-gray-300">Contractor Hash:</span> {user.contractorHash}</p>
 
-            <p className="text-sm text-gray-400">
-              <span className="font-medium text-gray-300">
-                Verified At:
-              </span>{" "}
-              {new Date(user.verifiedAt).toLocaleString()}
-            </p>
+            <p className="text-sm text-gray-400"><span className="font-medium text-gray-300">Verified At:</span> {new Date(user.verifiedAt).toLocaleString()}</p>
           </>
         ) : (
-          <p className="text-yellow-500">
-            ⚠️ Not verified yet.  
-            You cannot bid until a government authority verifies you.
-          </p>
+          <p className="text-yellow-500">⚠️ Not verified yet. You cannot bid until a government authority verifies you.</p>
         )}
-      </div>
+      </Card>
     </div>
   );
 }

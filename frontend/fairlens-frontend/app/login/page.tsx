@@ -48,45 +48,49 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="min-h-screen flex items-center justify-center" style={{ background: "var(--background-canvas)" }}>
       <form
         onSubmit={handleLogin}
-        className="w-full max-w-sm p-6 border rounded"
+        className="w-full max-w-sm p-6 surface rounded"
+        style={{ border: "1px solid var(--text-muted)" }}
       >
-        <h1 className="text-xl font-bold mb-4">Login</h1>
+        <h1 className="text-xl font-bold mb-4" style={{ color: "var(--text-primary)" }}>Login</h1>
 
         {error && (
-          <p className="text-red-500 text-sm mb-3">{error}</p>
+          <p className="text-sm mb-3" style={{ color: "var(--error)" }}>{error}</p>
         )}
 
+        <label className="block text-sm mb-1" style={{ color: "var(--text-secondary)" }}>Email</label>
         <input
           type="email"
-          className="w-full mb-3 p-2 border rounded"
-          placeholder="Email"
+          className="w-full mb-3 p-2 rounded"
+          placeholder="you@example.com"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          style={{ background: "var(--surface-white)", border: "1px solid var(--text-muted)" }}
         />
 
+        <label className="block text-sm mb-1" style={{ color: "var(--text-secondary)" }}>Password</label>
         <input
           type="password"
-          className="w-full mb-4 p-2 border rounded"
-          placeholder="Password"
+          className="w-full mb-4 p-2 rounded"
+          placeholder="••••••••"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
+          style={{ background: "var(--surface-white)", border: "1px solid var(--text-muted)" }}
         />
 
-        <button className="w-full bg-black text-white py-2 rounded">
+        <button className="w-full text-white py-2 rounded" style={{ background: "var(--accent-blue)" }}>
           Login
         </button>
 
-        {/* 🔓 Anonymous Access */}
         <div className="mt-4 text-center">
           <button
             type="button"
             onClick={() => router.push("/public/tenders")}
-            className="text-sm text-gray-400 hover:underline"
+            className="text-sm muted"
           >
             Continue as Anonymous →
           </button>

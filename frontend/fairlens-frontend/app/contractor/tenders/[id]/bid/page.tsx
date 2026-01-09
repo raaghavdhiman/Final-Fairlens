@@ -3,6 +3,9 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { requireRole } from "@/lib/requireRole";
+import MoneyAmount from "@/components/MoneyAmount";
+import StatusBadge from "@/components/StatusBadge";
+import Card from "@/components/Card";
 
 const API_URL = "http://localhost:3001";
 
@@ -79,57 +82,35 @@ export default function PlaceBidPage() {
   }
 
   return (
-    <div className="p-6 max-w-3xl mx-auto space-y-6">
-      <h1 className="text-2xl font-bold">Place Bid</h1>
+    <div className="p-6 max-w-3xl mx-auto space-y-4 compact-vertical">
+      <h1 className="text-2xl font-semibold title-strong">Place Bid</h1>
 
       {/* TENDER SUMMARY */}
-      <div className="border p-4 rounded space-y-1">
+      <Card className="space-y-1">
         <p className="font-semibold">{tender.title}</p>
-        <p className="text-sm text-gray-400">
-          {tender.description}
-        </p>
-        <p>Status: {tender.status}</p>
-        <p>Budget: {tender.budget ?? 0} ETH</p>
-      </div>
+        <p className="text-sm text-gray-400">{tender.description}</p>
+        <p>Status: <StatusBadge status={tender.status} /></p>
+        <p>Budget: <MoneyAmount eth={tender.budget ?? 0} /></p>
+      </Card>
 
       {/* BID FORM */}
-      <div className="border p-4 rounded space-y-4">
+      <Card className="space-y-3">
         <div>
-          <label className="block text-sm mb-1">
-            Bid Amount (ETH)
-          </label>
-          <input
-            type="number"
-            className="w-full p-2 border rounded"
-            value={amount}
-            onChange={(e) => setAmount(e.target.value)}
-          />
+          <label className="block text-sm mb-1">Bid Amount (ETH)</label>
+          <input type="number" className="w-full p-2 border rounded" value={amount} onChange={(e) => setAmount(e.target.value)} />
         </div>
 
         <div>
-          <label className="block text-sm mb-1">
-            Proposal
-          </label>
-          <textarea
-            className="w-full p-2 border rounded"
-            rows={4}
-            value={proposal}
-            onChange={(e) => setProposal(e.target.value)}
-          />
+          <label className="block text-sm mb-1">Proposal</label>
+          <textarea className="w-full p-2 border rounded" rows={4} value={proposal} onChange={(e) => setProposal(e.target.value)} />
         </div>
 
-        {error && (
-          <p className="text-red-500 text-sm">{error}</p>
-        )}
+        {error && <p className="text-red-500 text-sm">{error}</p>}
 
-        <button
-          onClick={submitBid}
-          disabled={submitting}
-          className="px-4 py-2 bg-blue-600 rounded disabled:opacity-50"
-        >
-          {submitting ? "Submitting..." : "Submit Bid"}
-        </button>
-      </div>
+        <div className="flex justify-end">
+          <button onClick={submitBid} disabled={submitting} className="px-3 py-2 bg-blue-600 rounded disabled:opacity-50">{submitting ? "Submitting..." : "Submit Bid"}</button>
+        </div>
+      </Card>
     </div>
   );
 }

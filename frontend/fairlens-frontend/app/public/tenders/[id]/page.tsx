@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { ethToInr, formatInr } from "@/utils/currency";
 import TenderTimeline from "@/components/TenderTimeline";
+import MoneyAmount from "@/components/MoneyAmount";
+import StatusBadge from "@/components/StatusBadge";
+import Card from "@/components/Card";
 
 /* ===============================
    API HELPERS
@@ -136,7 +139,7 @@ export default async function TenderDetailPage({
 
         <p>
           <span className="font-medium text-gray-300">Status:</span>{" "}
-          {tender.status}
+          <StatusBadge status={tender.status} />
         </p>
       </div>
 
@@ -144,10 +147,7 @@ export default async function TenderDetailPage({
       <div className="mb-6 text-gray-400">
         <p>
           <span className="font-medium">Total Budget:</span>{" "}
-          {formatInr(totalBudgetInr)}{" "}
-          <span className="text-gray-500">
-            ({totalBudgetEth} ETH)
-          </span>
+           <MoneyAmount eth={totalBudgetEth} />
         </p>
 
         <p className="mt-1">
@@ -155,9 +155,9 @@ export default async function TenderDetailPage({
           {progressPercent}%
         </p>
 
-        <div className="w-full h-2 bg-gray-800 rounded mt-2">
+        <div className="w-full h-2 bg-gray-200 rounded mt-2">
           <div
-            className="h-2 bg-green-500 rounded transition-all"
+            className="h-2 bg-[var(--success)] rounded"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
@@ -165,51 +165,37 @@ export default async function TenderDetailPage({
 
       {/* OPEN TENDER — BIDDING INFO */}
       {tender.status === "OPEN" && (
-        <div className="border border-yellow-500/40 bg-yellow-500/10 p-4 rounded mb-8">
-          <p className="font-medium text-yellow-400">
-            🟡 Bidding is currently in progress
+        <Card className="mb-8 bg-yellow-500/10 border-yellow-500/40 text-yellow-400">
+          <p className="font-medium">🟡 Bidding is currently in progress</p>
+
+          <p className="text-sm text-yellow-300 mt-1">
+            Number of bids received: <span className="font-medium">{tender._count?.bids ?? 0}</span>
           </p>
 
-          <p className="text-sm text-gray-300 mt-1">
-            Number of bids received:{" "}
-            <span className="font-medium">
-              {tender._count?.bids ?? 0}
-            </span>
-          </p>
-
-          <p className="text-xs text-gray-400 mt-1">
-            Bids will be disclosed after the tender is awarded.
-          </p>
-        </div>
+          <p className="text-xs text-yellow-200 mt-1">Bids will be disclosed after the tender is awarded.</p>
+        </Card>
       )}
 
       {/* CONTRACTOR INFO */}
       {tender.winningContractor && (
-        <div className="mb-8 border border-gray-700 rounded p-4">
-          <h3 className="font-semibold mb-2">
-            Awarded Contractor
-          </h3>
+        <Card className="mb-8 border-gray-700">
+          <h3 className="font-semibold mb-2">Awarded Contractor</h3>
 
           {tender.winningContractor.name && (
             <p className="text-sm text-gray-300">
-              <span className="font-medium">Name:</span>{" "}
-              {tender.winningContractor.name}
+              <span className="font-medium">Name:</span> {tender.winningContractor.name}
             </p>
           )}
 
           <p className="text-sm text-gray-300 mt-1">
             <span className="font-medium">Wallet:</span>{" "}
-            <span className="text-gray-400">
-              {tender.winningContractor.walletAddress ?? "Not available"}
-            </span>
+            <span className="text-gray-400">{tender.winningContractor.walletAddress ?? "Not available"}</span>
           </p>
 
           {tender.winningContractor.contractorHash && (
-            <p className="text-xs text-gray-500 mt-1 break-all">
-              Hash: {tender.winningContractor.contractorHash}
-            </p>
+            <p className="text-xs text-gray-500 mt-1 break-all">Hash: {tender.winningContractor.contractorHash}</p>
           )}
-        </div>
+        </Card>
       )}
 
       {/* MILESTONES */}
@@ -232,64 +218,25 @@ export default async function TenderDetailPage({
       ? "DELAYED"
       : "PENDING";
 
-  const statusStyles: Record<string, string> = {
-    COMPLETED: "bg-green-500/10 text-green-400 border-green-500/30",
-    IN_PROGRESS: "bg-blue-500/10 text-blue-400 border-blue-500/30",
-    PENDING: "bg-yellow-500/10 text-yellow-400 border-yellow-500/30",
-    DELAYED: "bg-red-500/10 text-red-400 border-red-500/30",
-  };
-
   return (
-    <div
-      key={m.id}
-      className={`border p-4 rounded relative ${statusStyles[status]}`}
-    >
-      {/* STATUS BADGE */}
-      <span className="absolute top-3 right-3 text-xs px-2 py-0.5 rounded border">
-        {status}
-      </span>
+    <Card key={m.id} size="sm" className="surface">
+      <div className="flex justify-between items-start">
+        <p className="font-medium text-[var(--text-primary)]">{m.description}</p>
+        <StatusBadge status={status} />
+      </div>
 
-      <p className="font-medium">
-        {m.description}
-      </p>
+      <p className="text-sm text-muted mt-2"><MoneyAmount eth={m.amount} /></p>
 
-      <p className="text-sm text-gray-300 mt-1">
-        {formatInr(ethToInr(m.amount))}{" "}
-        <span className="text-gray-500">
-          ({m.amount} ETH)
-        </span>
-      </p>
+      {m.dueDate && <p className="text-xs text-gray-500 mt-1">Due: {new Date(m.dueDate).toDateString()}</p>}
 
-      {m.dueDate && (
-        <p className="text-xs text-gray-500 mt-1">
-          Due: {new Date(m.dueDate).toDateString()}
-        </p>
-      )}
+      {m.penaltyAmount > 0 && <p className="text-xs text-red-400 mt-1">⚠ Penalty applied: {formatInr(ethToInr(m.penaltyAmount))}</p>}
 
-      {/* PENALTY */}
-      {m.penaltyAmount > 0 && (
-        <p className="text-xs text-red-400 mt-1">
-          ⚠ Penalty applied: {formatInr(ethToInr(m.penaltyAmount))}
-        </p>
-      )}
+      {m.actOfGod && <p className="text-xs text-yellow-400 mt-1">🌪 Act of God declared</p>}
 
-      {/* ACT OF GOD */}
-      {m.actOfGod && (
-        <p className="text-xs text-yellow-400 mt-1">
-          🌪 Act of God declared
-        </p>
-      )}
-
-      {/* VERIFY */}
       {m.paymentTxHash && (
-        <Link
-          href={`/public/milestones/${m.id}/verify`}
-          className="inline-block mt-2 text-sm text-blue-400 hover:underline"
-        >
-          Verify on Blockchain →
-        </Link>
+        <Link href={`/public/milestones/${m.id}/verify`} className="inline-block mt-2 text-sm text-blue-400 hover:underline">Verify on Blockchain →</Link>
       )}
-    </div>
+    </Card>
   );
 })}
 

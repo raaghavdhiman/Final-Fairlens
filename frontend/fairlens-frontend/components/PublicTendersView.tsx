@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import MoneyAmount from "@/components/MoneyAmount";
+import StatusBadge from "@/components/StatusBadge";
 
 const API_URL = "http://localhost:3001";
 
@@ -21,7 +23,7 @@ export default function PublicTendersView() {
   }, []);
 
   if (loading) {
-    return <p className="text-gray-400">Loading tenders…</p>;
+    return <p className="text-gray-500">Loading tenders…</p>;
   }
 
   return (
@@ -30,17 +32,15 @@ export default function PublicTendersView() {
         <Link
           key={t.id}
           href={`/public/tenders/${t.id}`}
-          className="block border border-gray-700 p-4 rounded hover:bg-gray-900 transition"
+          className="block border p-4 rounded hover:shadow-sm surface"
         >
-          <div className="flex justify-between">
-            <h3 className="font-semibold">{t.title}</h3>
-            <span className="text-sm text-gray-400">
-              {t.status}
-            </span>
+          <div className="flex justify-between items-start">
+            <h3 className="font-semibold text-lg text-['var(--text-primary)']">{t.title}</h3>
+            <StatusBadge status={t.status} />
           </div>
 
-          <p className="text-sm text-gray-400 mt-1">
-            Budget: {t.budget ?? "—"}
+                <p className="text-sm text-muted mt-1">
+            <MoneyAmount eth={t.budget} />
           </p>
         </Link>
       ))}

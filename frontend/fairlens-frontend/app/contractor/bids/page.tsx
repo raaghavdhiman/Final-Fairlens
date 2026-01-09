@@ -3,6 +3,9 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { requireRole } from "@/lib/requireRole";
+import MoneyAmount from "@/components/MoneyAmount";
+import StatusBadge from "@/components/StatusBadge";
+import Card from "@/components/Card";
 
 const API_URL = "http://localhost:3001";
 
@@ -41,54 +44,29 @@ export default function ContractorBidsPage() {
   }
 
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-6">
-      <h1 className="text-2xl font-bold">My Bids</h1>
+    <div className="p-6 max-w-5xl mx-auto space-y-4 compact-vertical">
+      <h1 className="text-2xl font-semibold title-strong">My Bids</h1>
 
       {bids.length === 0 && (
-        <p className="text-gray-400">You haven’t placed any bids yet.</p>
+        <p className="text-muted">You haven’t placed any bids yet.</p>
       )}
 
       {bids.map((bid) => (
-        <div
-          key={bid.id}
-          className="border p-4 rounded space-y-2"
-        >
+        <Card key={bid.id} className="space-y-2">
           <div className="flex justify-between">
-            <h2 className="font-semibold">
-              {bid.tender.title}
-            </h2>
+            <h2 className="font-semibold text-[var(--text-primary)]">{bid.tender.title}</h2>
 
-            {bid.isAccepted ? (
-              <span className="text-green-500 font-medium">
-                🏆 Awarded
-              </span>
-            ) : (
-              <span className="text-gray-400">
-                Pending
-              </span>
-            )}
+            {bid.isAccepted ? <StatusBadge status={"AWARDED"} /> : <StatusBadge status={"PENDING"} />}
           </div>
 
-          <p className="text-sm text-gray-400">
-            Tender Status: {bid.tender.status}
-          </p>
+          <p className="text-sm muted">Tender Status: <StatusBadge status={bid.tender.status} /></p>
 
-          <p>
-            Bid Amount:{" "}
-            <span className="font-medium">
-              {bid.amount} ETH
-            </span>
-          </p>
+          <p>Bid Amount: <MoneyAmount eth={bid.amount} /></p>
 
           <div className="pt-2">
-            <Link
-              href={`/contractor/tenders/${bid.tender.id}`}
-              className="text-blue-500 text-sm hover:underline"
-            >
-              View Tender
-            </Link>
+            <Link href={`/contractor/tenders/${bid.tender.id}`} className="text-[var(--accent-blue)] text-sm hover:underline">View Tender</Link>
           </div>
-        </div>
+        </Card>
       ))}
     </div>
   );

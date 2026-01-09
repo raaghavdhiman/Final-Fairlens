@@ -58,48 +58,57 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="min-h-screen flex items-center justify-center" style={{ background: "var(--background-canvas)" }}>
       <form
         onSubmit={handleSignup}
-        className="w-full max-w-md p-6 border border-gray-700 rounded"
+        className="w-full max-w-md p-6 surface rounded"
+        style={{ border: "1px solid var(--text-muted)" }}
       >
-        <h1 className="text-2xl font-bold mb-4">Create Account</h1>
+        <h1 className="text-2xl font-bold mb-4" style={{ color: "var(--text-primary)" }}>Create Account</h1>
 
         {error && (
-          <p className="text-red-400 text-sm mb-3">{error}</p>
+          <p className="text-sm mb-3" style={{ color: "var(--error)" }}>{error}</p>
         )}
 
+        <label className="block text-sm mb-1" style={{ color: "var(--text-secondary)" }}>Name</label>
         <input
           type="text"
-          placeholder="Name"
-          className="w-full mb-3 p-2 bg-black border border-gray-700 rounded"
+          placeholder="Full name"
+          className="w-full mb-3 p-2 rounded"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
+          style={{ background: "var(--surface-white)", border: "1px solid var(--text-muted)" }}
         />
 
+        <label className="block text-sm mb-1" style={{ color: "var(--text-secondary)" }}>Email</label>
         <input
           type="email"
-          placeholder="Email"
-          className="w-full mb-3 p-2 bg-black border border-gray-700 rounded"
+          placeholder="you@example.com"
+          className="w-full mb-3 p-2 rounded"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
+          style={{ background: "var(--surface-white)", border: "1px solid var(--text-muted)" }}
         />
 
+        <label className="block text-sm mb-1" style={{ color: "var(--text-secondary)" }}>Password</label>
         <input
           type="password"
-          placeholder="Password"
-          className="w-full mb-3 p-2 bg-black border border-gray-700 rounded"
+          placeholder="••••••••"
+          className="w-full mb-3 p-2 rounded"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
+          style={{ background: "var(--surface-white)", border: "1px solid var(--text-muted)" }}
         />
 
+        <label className="block text-sm mb-1" style={{ color: "var(--text-secondary)" }}>Role</label>
         <select
-          className="w-full mb-4 p-2 bg-black border border-gray-700 rounded"
+          className="w-full mb-4 p-2 rounded"
           value={role}
           onChange={(e) => setRole(e.target.value)}
+          style={{ background: "var(--surface-white)", border: "1px solid var(--text-muted)" }}
         >
           <option value="PUBLIC">Public</option>
           <option value="CONTRACTOR">Contractor</option>
@@ -109,19 +118,20 @@ export default function SignupPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-blue-600 hover:bg-blue-700 p-2 rounded font-medium"
+          className="w-full text-white p-2 rounded font-medium"
+          style={{ background: "var(--accent-blue)" }}
         >
           {loading ? "Creating..." : "Sign Up"}
         </button>
         <div className="mt-4 text-center">
-  <button
-    type="button"
-    onClick={() => router.push("/public/tenders")}
-    className="text-sm text-gray-400 hover:underline"
-  >
-    Continue as Anonymous →
-  </button>
-</div>
+          <button
+            type="button"
+            onClick={() => router.push("/public/tenders")}
+            className="text-sm muted"
+          >
+            Continue as Anonymous →
+          </button>
+        </div>
 
       </form>
     </div>

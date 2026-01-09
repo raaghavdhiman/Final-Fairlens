@@ -2,6 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { requireRole } from "@/lib/requireRole";
+import MoneyAmount from "@/components/MoneyAmount";
+import StatusBadge from "@/components/StatusBadge";
+import Card from "@/components/Card";
 
 const API_URL = "http://localhost:3001";
 
@@ -34,29 +37,21 @@ export default function GovAllBidsPage() {
   }
 
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-4">
-      <h1 className="text-2xl font-bold">All Contractor Bids</h1>
+    <div className="p-6 max-w-5xl mx-auto space-y-4 compact-vertical">
+      <h1 className="text-2xl font-semibold title-strong">All Contractor Bids</h1>
 
-      {bids.length === 0 && (
-        <p className="text-gray-400">No bids yet.</p>
-      )}
+      {bids.length === 0 && <p className="text-muted">No bids yet.</p>}
 
       {bids.map((b) => (
-        <div
-          key={b.id}
-          className="border border-gray-700 rounded p-4 space-y-1"
-        >
-          <p className="font-semibold">
-            Tender: {b.tender.title}
-          </p>
+        <Card key={b.id} className="space-y-1">
+          <div className="flex justify-between items-start">
+            <p className="font-semibold text-[var(--text-primary)]">Tender: {b.tender.title}</p>
+            {b.isAccepted ? <StatusBadge status="AWARDED" /> : null}
+          </div>
 
           <p>Contractor: {b.contractor.name}</p>
-          <p>Amount: {b.amount} ETH</p>
-
-          {b.isAccepted && (
-            <span className="text-green-500">🏆 Awarded</span>
-          )}
-        </div>
+          <p>Amount: <MoneyAmount eth={b.amount} /></p>
+        </Card>
       ))}
     </div>
   );

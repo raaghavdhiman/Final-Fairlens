@@ -36,7 +36,7 @@ export default function CreateTenderPage() {
 
   return (
     <div className="p-6 max-w-xl mx-auto space-y-4">
-      <h1 className="text-2xl font-bold">Create Tender</h1>
+      <h1 className="text-2xl font-semibold title-strong">Create Tender</h1>
 
       <form onSubmit={handleSubmit} className="space-y-3">
         <input

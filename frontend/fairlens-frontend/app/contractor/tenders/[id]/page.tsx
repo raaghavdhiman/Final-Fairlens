@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { requireRole } from "@/lib/requireRole";
+import MoneyAmount from "@/components/MoneyAmount";
+import StatusBadge from "@/components/StatusBadge";
 
 const API_URL = "http://localhost:3001";
 
@@ -43,12 +45,16 @@ export default function ContractorTenderDetailPage() {
 
   return (
     <div className="p-6 max-w-4xl mx-auto space-y-4">
-      <h1 className="text-2xl font-bold">{tender.title}</h1>
+      <h1 className="text-2xl font-semibold title-strong">{tender.title}</h1>
       <p className="text-gray-400">{tender.description}</p>
 
       <div className="space-y-1">
-        <p><b>Budget:</b> {tender.budget} ETH</p>
-        <p><b>Status:</b> {tender.status}</p>
+        <p>
+          <b>Budget:</b> <MoneyAmount eth={tender.budget} />
+        </p>
+        <p>
+          <b>Status:</b> <StatusBadge status={tender.status} />
+        </p>
       </div>
 
       {tender.status === "OPEN" && (

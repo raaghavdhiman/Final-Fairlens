@@ -4,6 +4,9 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { requireRole } from "@/lib/requireRole";
 import { ethers } from "ethers";
+import MoneyAmount from "@/components/MoneyAmount";
+import StatusBadge from "@/components/StatusBadge";
+import Card from "@/components/Card";
 
 const API_URL = "http://localhost:3001";
 const SEPOLIA_RPC = process.env.NEXT_PUBLIC_SEPOLIA_RPC!;
@@ -134,11 +137,11 @@ export default function GovMilestonesPage() {
   }
 
   return (
-    <div className="p-6 space-y-6">
-      <h1 className="text-2xl font-bold">Milestones</h1>
+    <div className="p-6 space-y-4 compact-vertical">
+      <h1 className="text-2xl font-semibold title-strong">Milestones</h1>
 
       {/* CREATE MILESTONE */}
-      <div className="border p-4 rounded space-y-3">
+      <Card className="space-y-3">
         <h2 className="font-semibold">Create Milestone</h2>
 
         <input
@@ -171,64 +174,35 @@ export default function GovMilestonesPage() {
           onChange={(e) => setPenaltyRate(e.target.value)}
         />
 
-        <button
-          onClick={createMilestone}
-          className="px-4 py-2 bg-blue-600 rounded"
-        >
-          Add Milestone
-        </button>
-      </div>
+        <div className="flex justify-end">
+          <button onClick={createMilestone} className="px-3 py-2 bg-blue-600 rounded">Add Milestone</button>
+        </div>
+      </Card>
 
       {milestones.map((m) => (
-        <div key={m.id} className="border p-4 rounded space-y-2">
+        <Card key={m.id} size="sm" className="space-y-2">
           <p className="font-medium">{m.description}</p>
-          <p className="text-sm text-gray-400">Amount: {m.amount} ETH</p>
-          <p>Status: {m.status}</p>
+          <p className="text-sm text-gray-400">Amount: <MoneyAmount eth={m.amount} /></p>
+          <p>Status: <StatusBadge status={m.status} /></p>
 
-          {m.status === "COMPLETED" && !m.verifiedAt && (
-            <button
-              onClick={() => verifyMilestone(m.id)}
-              className="px-3 py-1 bg-green-600 rounded"
-            >
-              Verify Work
-            </button>
-          )}
+          <div className="mt-3 border-t pt-3 flex justify-end items-center gap-2">
+            {m.status === "COMPLETED" && !m.verifiedAt && (
+              <button onClick={() => verifyMilestone(m.id)} className="px-3 py-1 text-sm bg-green-600 rounded">Verify Work</button>
+            )}
 
-          {m.status === "COMPLETED" && m.verifiedAt && !m.paidAt && (
-            <button
-              onClick={() => releasePayment(m.id)}
-              className="px-3 py-1 bg-purple-600 rounded"
-            >
-              Release Payment
-            </button>
-          )}
+            {m.status === "COMPLETED" && m.verifiedAt && !m.paidAt && (
+              <button onClick={() => releasePayment(m.id)} className="px-3 py-1 text-sm bg-purple-600 rounded">Release Payment</button>
+            )}
 
-          {m.paidAt && (
-            <div className="space-y-1">
-              <p className="text-green-500">✅ Paid</p>
-
-              {m.paymentTxHash ? (
-                !verifiedTxs[m.id] ? (
-                  <button
-                    onClick={() => verifyOnChain(m.paymentTxHash, m.id)}
-                    disabled={verifyingTx === m.id}
-                    className="px-3 py-1 bg-black rounded"
-                  >
-                    {verifyingTx === m.id
-                      ? "Verifying..."
-                      : "Verify on Blockchain"}
-                  </button>
-                ) : (
-                  <p className="text-green-400">🔗 Verified on-chain</p>
-                )
+            {m.paidAt && (
+              !verifiedTxs[m.id] ? (
+                <button onClick={() => verifyOnChain(m.paymentTxHash, m.id)} disabled={verifyingTx === m.id} className="px-3 py-1 text-sm border border-gray-300 rounded">{verifyingTx === m.id ? "Verifying..." : "Verify on Blockchain"}</button>
               ) : (
-                <p className="text-gray-500 text-sm">
-                  ⚠ Payment not anchored on-chain
-                </p>
-              )}
-            </div>
-          )}
-        </div>
+                <p className="text-green-400 text-sm">🔗 Verified on-chain</p>
+              )
+            )}
+          </div>
+        </Card>
       ))}
     </div>
   );
