@@ -1,0 +1,18 @@
+# Node
+node_modules/
+.env
+.env.local
+
+# Next.js
+.next/
+out/
+
+# Prisma
+prisma/migrations/
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db

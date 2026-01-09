@@ -1,0 +1,127 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String     @id @default(uuid()) @db.Uuid
+  email           String     @unique
+  name            String
+  role            Role
+  walletAddress   String?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+  password        String
+  contractorHash  String?
+  contractAddress String?
+  verifiedAt      DateTime?
+  verifiedBy      String?    @db.Uuid
+  auditLogs       AuditLog[]
+  bids            Bid[]
+  createdTenders  Tender[]   @relation("CreatedTenders")
+  wonTenders      Tender[]   @relation("WinningContractor")
+
+  @@map("users")
+}
+
+model Tender {
+  id                  String       @id @default(uuid()) @db.Uuid
+  title               String
+  description         String
+  status              TenderStatus @default(DRAFT)
+  budget              Float?
+  deadline            DateTime?
+  contractAddress     String?
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
+  createdById         String       @db.Uuid
+  winningContractorId String?      @db.Uuid
+  auditLogs           AuditLog[]
+  department        String?
+  location          String?
+  expectedTimeline  String? @map("expected_timeline")
+  bids                Bid[]
+  milestones          Milestone[]
+  createdBy           User         @relation("CreatedTenders", fields: [createdById], references: [id])
+  winningContractor   User?        @relation("WinningContractor", fields: [winningContractorId], references: [id])
+
+  @@map("tenders")
+}
+
+model Milestone {
+  id             String          @id @default(uuid()) @db.Uuid
+  description    String
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  tenderId       String          @db.Uuid
+  amount         Float
+  paidAt         DateTime?
+  submittedAt    DateTime?
+  verifiedAt     DateTime?
+  status         MilestoneStatus @default(PENDING)
+  paymentTxHash  String?
+  dueDate        DateTime?       @db.Timestamp(6)
+  penaltyRate    Float?          @default(0)
+  delayDays      Int?            @default(0)
+  penaltyAmount  Float?          @default(0)
+  actOfGod       Boolean?        @default(false)
+  actOfGodReason String?
+  tender         Tender          @relation(fields: [tenderId], references: [id], onDelete: Cascade)
+
+  @@map("milestones")
+}
+
+model Bid {
+  id           String   @id @default(uuid()) @db.Uuid
+  amount       Float
+  proposal     String
+  isAccepted   Boolean  @default(false)
+  submittedAt  DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  tenderId     String   @db.Uuid
+  contractorId String   @db.Uuid
+  contractor   User     @relation(fields: [contractorId], references: [id], onDelete: Cascade)
+  tender       Tender   @relation(fields: [tenderId], references: [id], onDelete: Cascade)
+
+  @@map("bids")
+}
+
+model AuditLog {
+  id        String   @id @default(uuid()) @db.Uuid
+  action    String
+  details   String?
+  timestamp DateTime @default(now())
+  userId    String   @db.Uuid
+  tenderId  String?  @db.Uuid
+  auditHash String?
+  txHash    String?
+  tender    Tender?  @relation(fields: [tenderId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("audit_logs")
+}
+
+enum Role {
+  GOVERNMENT
+  CONTRACTOR
+  PUBLIC
+}
+
+enum TenderStatus {
+  DRAFT
+  OPEN
+  CLOSED
+  AWARDED
+  CANCELLED
+}
+
+enum MilestoneStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  DELAYED
+}

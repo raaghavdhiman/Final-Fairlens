@@ -1,0 +1,5 @@
+export enum Role {
+  GOVERNMENT = 'GOVERNMENT',
+  CONTRACTOR = 'CONTRACTOR',
+  PUBLIC = 'PUBLIC',
+}
