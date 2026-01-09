@@ -143,38 +143,30 @@ export class TendersService {
   bidId: string,
   governmentId: string,
 ) {
-  return this.prisma.$transaction(async (tx) => {
+  // 1️⃣ Transaction: DB ONLY
+  const updatedTender = await this.prisma.$transaction(async (tx) => {
     const tender = await tx.tender.findUnique({
       where: { id: tenderId },
     });
 
-    if (!tender) {
-      throw new BadRequestException('Tender not found');
-    }
-
-    if (tender.createdById !== governmentId) {
+    if (!tender) throw new BadRequestException('Tender not found');
+    if (tender.createdById !== governmentId)
       throw new ForbiddenException('Not authorized');
-    }
-
-    if (tender.status === 'AWARDED') {
+    if (tender.status === 'AWARDED')
       throw new BadRequestException('Tender already awarded');
-    }
 
     const bid = await tx.bid.findUnique({
       where: { id: bidId },
     });
 
-    if (!bid || bid.tenderId !== tenderId) {
+    if (!bid || bid.tenderId !== tenderId)
       throw new BadRequestException('Invalid bid');
-    }
 
-    // ✅ Mark winning bid
     await tx.bid.update({
       where: { id: bidId },
       data: { isAccepted: true },
     });
 
-    // ❌ Reject others
     await tx.bid.updateMany({
       where: {
         tenderId,
@@ -183,25 +175,26 @@ export class TendersService {
       data: { isAccepted: false },
     });
 
-    // 🏆 Update tender
-    const updatedTender = await tx.tender.update({
+    return tx.tender.update({
       where: { id: tenderId },
       data: {
         status: 'AWARDED',
         winningContractorId: bid.contractorId,
       },
     });
-
-    await this.auditService.log({
-      userId: governmentId,
-      tenderId,
-      action: 'BID_AWARDED',
-      details: `Bid ${bidId} awarded`,
-    });
-
-    return updatedTender;
   });
+
+  // 2️⃣ AFTER transaction (safe)
+  await this.auditService.log({
+    userId: governmentId,
+    tenderId,
+    action: 'BID_AWARDED',
+    details: `Bid ${bidId} awarded`,
+  });
+
+  return updatedTender;
 }
+
 
   /* =========================================================
      CANCEL (ONLY NON-FINAL)
