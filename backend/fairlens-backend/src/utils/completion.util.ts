@@ -5,6 +5,7 @@ export function calculateCompletionPercent(
   milestones: {
     amount: number;
     status: MilestoneStatus;
+    isPaid: boolean;
   }[],
 ): number {
   if (!tenderBudget || tenderBudget <= 0) {
@@ -15,7 +16,7 @@ export function calculateCompletionPercent(
     .filter(
       (m) =>
         m.status === MilestoneStatus.COMPLETED ||
-        m.status === MilestoneStatus.PAID, // if you use PAID separately
+        m.isPaid === true
     )
     .reduce((sum, m) => sum + m.amount, 0);
 
