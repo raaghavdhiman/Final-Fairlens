@@ -57,14 +57,14 @@ export default function MyTendersPage() {
 
         <Link
           href="/gov/tenders/create"
-          className="px-4 py-2 bg-blue-600 text-white rounded"
+          className="px-4 py-2 bg-[var(--color-accent)] text-[var(--btn-primary-text)] rounded"
         >
           + Create Tender
         </Link>
       </div>
 
       {tenders.length === 0 && (
-        <p className="text-gray-400">
+        <p className="text-[var(--color-border)]">
           You haven’t created any tenders yet.
         </p>
       )}
@@ -74,7 +74,7 @@ export default function MyTendersPage() {
           <Link
             key={t.id}
             href={`/gov/tenders/${t.id}`}
-            className="block border rounded p-4 hover:shadow-sm surface"
+            className="block border-[var(--color-border)] rounded p-4 hover:shadow-sm surface"
           >
             <div className="flex justify-between items-start">
               <div>

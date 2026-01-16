@@ -48,16 +48,16 @@ export default async function MilestoneVerificationPage({
 
         <p className="text-sm text-gray-300">Amount Paid: <MoneyAmount eth={paidEth} /></p>
 
-        <p className="text-xs text-gray-400 mt-2">Transaction: <a href={`https://sepolia.etherscan.io/tx/${data.payment.txHash}`} target="_blank" className="text-blue-400 ml-2 break-all">{data.payment.txHash}</a></p>
+        <p className="text-xs text-[rgba(47,69,80,0.7)] mt-2">Transaction: <a href={`https://sepolia.etherscan.io/tx/${data.payment.txHash}`} target="_blank" className="text-[rgba(47,69,80,0.7)] ml-2 break-all">{data.payment.txHash}</a></p>
       </Card>
 
       {/* CRYPTO PROOF */}
       <Card className="border-gray-700">
         <h2 className="font-semibold mb-2">Cryptographic Proof</h2>
 
-        <p className="text-xs text-gray-400 mb-2 break-all"><span className="font-medium">Emitted Hash:</span> {data.cryptographicProof.emittedHash}</p>
+        <p className="text-xs text-[rgba(47,69,80,0.7)] mb-2 break-all"><span className="font-medium">Emitted Hash:</span> {data.cryptographicProof.emittedHash}</p>
 
-        <p className="text-xs text-gray-400 break-all"><span className="font-medium">Recomputed Hash:</span> {data.cryptographicProof.recomputedHash}</p>
+        <p className="text-xs text-[rgba(47,69,80,0.7)] break-all"><span className="font-medium">Recomputed Hash:</span> {data.cryptographicProof.recomputedHash}</p>
       </Card>
     </div>
   );

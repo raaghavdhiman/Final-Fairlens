@@ -40,7 +40,7 @@ export default function CreateTenderPage() {
 
       <form onSubmit={handleSubmit} className="space-y-3">
         <input
-          className="w-full p-2 border rounded"
+          className="w-full p-2 border-[var(--color-border)] rounded"
           placeholder="Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
@@ -48,7 +48,7 @@ export default function CreateTenderPage() {
         />
 
         <textarea
-          className="w-full p-2 border rounded"
+          className="w-full p-2 border-[var(--color-border)] rounded"
           placeholder="Description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
@@ -56,7 +56,7 @@ export default function CreateTenderPage() {
         />
 
         <input
-          className="w-full p-2 border rounded"
+          className="w-full p-2 border-[var(--color-border)] rounded"
           type="number"
           placeholder="Budget (ETH)"
           value={budget}
@@ -64,7 +64,7 @@ export default function CreateTenderPage() {
           required
         />
 
-        <button className="px-4 py-2 bg-blue-600 rounded">
+        <button className="px-4 py-2 bg-[var(--color-accent)] text-[var(--btn-primary-text)] rounded">
           Create Tender
         </button>
       </form>

@@ -108,29 +108,29 @@ export default async function TenderDetailPage({
       </h1>
 
       {/* DESCRIPTION */}
-      <p className="mb-4 text-gray-300">
+      <p className="mb-4 text-[var(--color-text-secondary)]">
         {tender.description}
       </p>
 
       {/* META INFO */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 text-sm text-gray-400">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6 text-sm text-[var(--color-border)]">
         {tender.department && (
           <p>
-            <span className="font-medium text-gray-300">Department:</span>{" "}
+            <span className="font-medium text-[var(--color-text-secondary)]">Department:</span>{" "}
             {tender.department}
           </p>
         )}
 
         {tender.location && (
           <p>
-            <span className="font-medium text-gray-300">Location:</span>{" "}
+            <span className="font-medium text-[var(--color-text-secondary)]">Location:</span>{" "}
             {tender.location}
           </p>
         )}
 
         {tender.expectedTimeline && (
           <p>
-            <span className="font-medium text-gray-300">
+            <span className="font-medium text-[var(--color-text-secondary)]">
               Expected Timeline:
             </span>{" "}
             {tender.expectedTimeline}
@@ -138,13 +138,13 @@ export default async function TenderDetailPage({
         )}
 
         <p>
-          <span className="font-medium text-gray-300">Status:</span>{" "}
+          <span className="font-medium text-[var(--color-text-secondary)]">Status:</span>{" "}
           <StatusBadge status={tender.status} />
         </p>
       </div>
 
       {/* BUDGET + PROGRESS */}
-      <div className="mb-6 text-gray-400">
+      <div className="mb-6 text-[var(--color-border)]">
         <p>
           <span className="font-medium">Total Budget:</span>{" "}
            <MoneyAmount eth={totalBudgetEth} />
@@ -155,7 +155,7 @@ export default async function TenderDetailPage({
           {progressPercent}%
         </p>
 
-        <div className="w-full h-2 bg-gray-200 rounded mt-2">
+        <div className="w-full h-2 bg-[var(--color-bg)] rounded mt-2">
           <div
             className="h-2 bg-[var(--success)] rounded"
             style={{ width: `${progressPercent}%` }}
@@ -178,22 +178,22 @@ export default async function TenderDetailPage({
 
       {/* CONTRACTOR INFO */}
       {tender.winningContractor && (
-        <Card className="mb-8 border-gray-700">
+        <Card className="mb-8 border-[var(--color-border)]">
           <h3 className="font-semibold mb-2">Awarded Contractor</h3>
 
           {tender.winningContractor.name && (
-            <p className="text-sm text-gray-300">
+            <p className="text-sm text-[var(--color-text-secondary)]">
               <span className="font-medium">Name:</span> {tender.winningContractor.name}
             </p>
           )}
 
-          <p className="text-sm text-gray-300 mt-1">
+          <p className="text-sm text-[var(--color-text-secondary)] mt-1">
             <span className="font-medium">Wallet:</span>{" "}
-            <span className="text-gray-400">{tender.winningContractor.walletAddress ?? "Not available"}</span>
+            <span className="text-[var(--color-border)]">{tender.winningContractor.walletAddress ?? "Not available"}</span>
           </p>
 
           {tender.winningContractor.contractorHash && (
-            <p className="text-xs text-gray-500 mt-1 break-all">Hash: {tender.winningContractor.contractorHash}</p>
+            <p className="text-xs text-[var(--color-border)] mt-1 break-all">Hash: {tender.winningContractor.contractorHash}</p>
           )}
         </Card>
       )}
@@ -204,7 +204,7 @@ export default async function TenderDetailPage({
       </h2>
 
       {milestones.length === 0 && (
-        <p className="text-gray-400">No milestones added yet.</p>
+        <p className="text-[var(--color-border)]">No milestones added yet.</p>
       )}
 
       <div className="space-y-3 mb-10">
@@ -227,14 +227,14 @@ export default async function TenderDetailPage({
 
       <p className="text-sm text-muted mt-2"><MoneyAmount eth={m.amount} /></p>
 
-      {m.dueDate && <p className="text-xs text-gray-500 mt-1">Due: {new Date(m.dueDate).toDateString()}</p>}
+      {m.dueDate && <p className="text-xs text-[var(--color-border)] mt-1">Due: {new Date(m.dueDate).toDateString()}</p>}
 
       {m.penaltyAmount > 0 && <p className="text-xs text-red-400 mt-1">⚠ Penalty applied: {formatInr(ethToInr(m.penaltyAmount))}</p>}
 
       {m.actOfGod && <p className="text-xs text-yellow-400 mt-1">🌪 Act of God declared</p>}
 
       {m.paymentTxHash && (
-        <Link href={`/public/milestones/${m.id}/verify`} className="inline-block mt-2 text-sm text-blue-400 hover:underline">Verify on Blockchain →</Link>
+        <Link href={`/public/milestones/${m.id}/verify`} className="inline-block mt-2 text-sm text-[var(--color-accent)] hover:underline">Verify on Blockchain →</Link>
       )}
     </Card>
   );

@@ -4,20 +4,20 @@ export default function StatusBadge({ status }: { status: string }) {
   const key = (status || "").toUpperCase();
 
   const map: Record<string, { bg: string; color: string }> = {
-    OPEN: { bg: "var(--accent-blue)", color: "#ffffff" },
-    ACTIVE: { bg: "var(--accent-blue)", color: "#ffffff" },
+    OPEN: { bg: "var(--color-accent)", color: "#ffffff" },
+    ACTIVE: { bg: "var(--color-accent)", color: "#ffffff" },
     AWARDED: { bg: "var(--success)", color: "#ffffff" },
     COMPLETED: { bg: "var(--success)", color: "#ffffff" },
-    DRAFT: { bg: "var(--warning)", color: "#ffffff" },
-    PENDING: { bg: "var(--warning)", color: "#0F172A" },
-    PENDING_VERIFICATION: { bg: "var(--warning)", color: "#0F172A" },
-    IN_PROGRESS: { bg: "var(--accent-blue)", color: "#ffffff" },
+    DRAFT: { bg: "#6b7280", color: "#ffffff" }, // neutral gray
+    PENDING: { bg: "var(--color-border)", color: "#ffffff" }, // Blue Slate
+    PENDING_VERIFICATION: { bg: "var(--color-border)", color: "#ffffff" },
+    IN_PROGRESS: { bg: "var(--color-accent)", color: "#ffffff" },
     DELAYED: { bg: "var(--error)", color: "#ffffff" },
-    CLOSED: { bg: "#E6EEF6", color: "var(--text-secondary)" },
+    CLOSED: { bg: "#6b7280", color: "#ffffff" }, // neutral gray
     REJECTED: { bg: "var(--error)", color: "#ffffff" },
   };
 
-  const styles = map[key] ?? { bg: "#E6EEF6", color: "var(--text-secondary)" };
+  const styles = map[key] ?? { bg: "var(--color-bg)", color: "var(--color-text-secondary)" };
 
   return (
     <span

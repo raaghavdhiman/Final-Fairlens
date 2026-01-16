@@ -122,13 +122,13 @@ export default function ContractorProfilePage() {
           <>
             <p className="text-green-500 font-medium">✅ Verified on blockchain</p>
 
-            <p className="text-sm text-gray-400 break-all">
-              <span className="font-medium text-gray-300">Contractor Hash:</span>{" "}
+            <p className="text-sm text-[var(--color-border)] break-all">
+              <span className="font-medium text-[var(--color-text-secondary)]">Contractor Hash:</span>{" "}
               {user.contractorHash}
             </p>
 
-            <p className="text-sm text-gray-400">
-              <span className="font-medium text-gray-300">Verified At:</span>{" "}
+            <p className="text-sm text-[var(--color-border)]">
+              <span className="font-medium text-[var(--color-text-secondary)]">Verified At:</span>{" "}
               {new Date(user.verifiedAt).toLocaleString()}
             </p>
           </>
@@ -154,13 +154,13 @@ export default function ContractorProfilePage() {
               {user.walletAddress}
             </p>
             <p className="text-green-500 text-sm">Wallet linked</p>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-[var(--color-border)]">
               Wallet addresses are locked once linked.
             </p>
           </>
         ) : (
           <>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-[var(--color-text-secondary)]">
               Enter your Ethereum wallet address. Once linked, it cannot be changed.
             </p>
 
@@ -169,7 +169,8 @@ export default function ContractorProfilePage() {
               value={walletInput}
               onChange={handleWalletChange}
               placeholder="0x..."
-              className="w-full p-2 border border-gray-300 rounded"
+              className="w-full p-2 border-[var(--color-border)] rounded"
+              style={{ background: "var(--color-surface)" }}
             />
 
             <button

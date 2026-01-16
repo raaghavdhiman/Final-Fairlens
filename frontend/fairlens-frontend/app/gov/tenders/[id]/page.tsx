@@ -50,7 +50,7 @@ export default function GovTenderDetailPage() {
   return (
     <div className="p-6 space-y-4">
       <h1 className="text-2xl font-semibold title-strong">{tender.title}</h1>
-      <p className="text-gray-400">{tender.description}</p>
+      <p className="text-[var(--color-border)]">{tender.description}</p>
 
       <div className="space-y-1">
         <p>
@@ -68,7 +68,7 @@ export default function GovTenderDetailPage() {
         {tender.status === "DRAFT" && (
           <button
             onClick={() => handleOpen(id)}
-            className="px-4 py-2 bg-green-600 rounded hover:bg-green-700"
+            className="px-4 py-2 bg-[var(--color-accent)] text-[var(--btn-primary-text)] rounded hover:bg-[#1ae8ff]"
           >
             Open Tender
           </button>
@@ -77,7 +77,7 @@ export default function GovTenderDetailPage() {
         {tender.status === "OPEN" && (
           <button
             onClick={() => handleClose(id)}
-            className="px-4 py-2 bg-yellow-600 rounded hover:bg-yellow-700"
+            className="px-4 py-2 bg-[var(--btn-secondary-bg)] text-[var(--btn-secondary-text)] rounded hover:bg-[#4a6a84]"
           >
             Close Tender
           </button>
@@ -85,14 +85,14 @@ export default function GovTenderDetailPage() {
 
         <button
           onClick={() => router.push(`/gov/milestones/${id}`)}
-          className="px-4 py-2 bg-blue-600 rounded hover:bg-blue-700"
+          className="px-4 py-2 bg-[var(--color-accent)] text-[var(--btn-primary-text)] rounded hover:bg-[#1ae8ff]"
         >
           Manage Milestones
         </button>
 
         <button
           onClick={() => router.push(`/gov/bids/${id}`)}
-          className="px-4 py-2 bg-purple-600 rounded hover:bg-purple-700"
+          className="px-4 py-2 bg-[var(--color-accent)] text-[var(--btn-primary-text)] rounded hover:bg-[#1ae8ff]"
         >
           View / Award Bids
         </button>

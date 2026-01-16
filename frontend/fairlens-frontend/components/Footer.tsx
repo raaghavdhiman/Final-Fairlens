@@ -1,7 +1,7 @@
 export default function Footer() {
   return (
-    <footer style={{ background: "var(--background-canvas)" }} className="w-full border-t">
-      <div className="max-w-[var(--app-max-width)] mx-auto px-6 py-8 text-sm" style={{ color: "var(--text-secondary)" }}>
+    <footer style={{ background: "#2f4550" }} className="w-full border-t">
+      <div className="max-w-[var(--app-max-width)] mx-auto px-6 py-8 text-sm" style={{ color: "#cfc0bd" }}>
         <div className="flex items-start justify-between gap-6">
           <div style={{ maxWidth: 520 }}>
             <div className="flex items-center gap-3">
@@ -12,12 +12,12 @@ export default function Footer() {
                 </svg>
               </div>
               <div>
-                <div style={{ fontWeight: 700, color: 'var(--text-primary)' }}>FairLens</div>
-                <div style={{ fontSize: 13, color: 'var(--text-secondary)' }}>Public Transparency Platform</div>
+                <div style={{ fontWeight: 700, color: '#cfc0bd' }}>FairLens</div>
+                <div style={{ fontSize: 13, color: '#cfc0bd' }}>Public Transparency Platform</div>
               </div>
             </div>
 
-            <p style={{ marginTop: 12, color: 'var(--text-secondary)', lineHeight: 1.5 }}>
+            <p style={{ marginTop: 12, color: '#cfc0bd', lineHeight: 1.5 }}>
               About FairLens<br />
               FairLens is a public transparency platform enabling citizens to track government tenders, milestones, and payments with on-chain verification.
             </p>
@@ -25,7 +25,7 @@ export default function Footer() {
 
           <div className="flex gap-12">
             <div>
-              <div style={{ fontWeight: 600, color: 'var(--text-primary)' }}>Explore</div>
+              <div style={{ fontWeight: 600, color: '#cfc0bd' }}>Explore</div>
               <ul style={{ marginTop: 8 }}>
                 <li className="mt-2"><a className="footer-link" href="/public/tenders">Public Tenders</a></li>
                 <li className="mt-2"><a className="footer-link" href="/how-it-works">How It Works</a></li>
@@ -35,7 +35,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div style={{ marginTop: 20, borderTop: '1px solid rgba(15,23,42,0.04)', paddingTop: 14, color: 'var(--text-secondary)' }}>
+        <div style={{ marginTop: 20, borderTop: '1px solid rgba(15,23,42,0.04)', paddingTop: 14, color: '#cfc0bd' }}>
           © {new Date().getFullYear()} FairLens — Public Procurement Dashboard
         </div>
       </div>

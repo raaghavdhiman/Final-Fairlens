@@ -54,7 +54,7 @@ export default function ContractorBidsPage() {
       {bids.map((bid) => (
         <Card key={bid.id} className="space-y-2">
           <div className="flex justify-between">
-            <h2 className="font-semibold text-[var(--text-primary)]">{bid.tender.title}</h2>
+            <h2 className="font-semibold text-[var(--color-text-primary)]">{bid.tender.title}</h2>
 
             {bid.isAccepted ? <StatusBadge status={"AWARDED"} /> : <StatusBadge status={"PENDING"} />}
           </div>
@@ -64,7 +64,7 @@ export default function ContractorBidsPage() {
           <p>Bid Amount: <MoneyAmount eth={bid.amount} /></p>
 
           <div className="pt-2">
-            <Link href={`/contractor/tenders/${bid.tender.id}`} className="text-[var(--accent-blue)] text-sm hover:underline">View Tender</Link>
+            <Link href={`/contractor/tenders/${bid.tender.id}`} className="text-[var(--color-accent)] text-sm hover:underline">View Tender</Link>
           </div>
         </Card>
       ))}

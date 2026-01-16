@@ -8,7 +8,7 @@ export default function ProgressBar({ value }: Props) {
   return (
     <div className="w-full bg-gray-200 rounded h-2">
       <div
-        className="bg-green-600 h-2 rounded transition-all"
+        className="bg-[var(--success)] h-2 rounded transition-all"
         style={{ width: `${safeValue}%` }}
       />
     </div>

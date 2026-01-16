@@ -58,19 +58,19 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center" style={{ background: "var(--background-canvas)" }}>
+    <div className="min-h-screen flex items-center justify-center" style={{ background: "var(--color-page-bg)" }}>
       <form
         onSubmit={handleSignup}
         className="w-full max-w-md p-6 surface rounded"
-        style={{ border: "1px solid var(--text-muted)" }}
+        style={{ border: "1px solid var(--color-border)" }}
       >
-        <h1 className="text-2xl font-bold mb-4" style={{ color: "var(--text-primary)" }}>Create Account</h1>
+        <h1 className="text-2xl font-bold mb-4" style={{ color: "var(--color-text-primary)" }}>Create Account</h1>
 
         {error && (
           <p className="text-sm mb-3" style={{ color: "var(--error)" }}>{error}</p>
         )}
 
-        <label className="block text-sm mb-1" style={{ color: "var(--text-secondary)" }}>Name</label>
+        <label className="block text-sm mb-1" style={{ color: "var(--color-text-secondary)" }}>Name</label>
         <input
           type="text"
           placeholder="Full name"
@@ -78,10 +78,10 @@ export default function SignupPage() {
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
-          style={{ background: "var(--surface-white)", border: "1px solid var(--text-muted)" }}
+          style={{ background: "var(--color-surface)", border: "1px solid var(--color-border)" }}
         />
 
-        <label className="block text-sm mb-1" style={{ color: "var(--text-secondary)" }}>Email</label>
+        <label className="block text-sm mb-1" style={{ color: "var(--color-text-secondary)" }}>Email</label>
         <input
           type="email"
           placeholder="you@example.com"
@@ -89,10 +89,10 @@ export default function SignupPage() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          style={{ background: "var(--surface-white)", border: "1px solid var(--text-muted)" }}
+          style={{ background: "var(--color-surface)", border: "1px solid var(--color-border)" }}
         />
 
-        <label className="block text-sm mb-1" style={{ color: "var(--text-secondary)" }}>Password</label>
+        <label className="block text-sm mb-1" style={{ color: "var(--color-text-secondary)" }}>Password</label>
         <input
           type="password"
           placeholder="••••••••"
@@ -100,15 +100,15 @@ export default function SignupPage() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          style={{ background: "var(--surface-white)", border: "1px solid var(--text-muted)" }}
+          style={{ background: "var(--color-surface)", border: "1px solid var(--color-border)" }}
         />
 
-        <label className="block text-sm mb-1" style={{ color: "var(--text-secondary)" }}>Role</label>
+        <label className="block text-sm mb-1" style={{ color: "var(--color-text-secondary)" }}>Role</label>
         <select
           className="w-full mb-4 p-2 rounded"
           value={role}
           onChange={(e) => setRole(e.target.value)}
-          style={{ background: "var(--surface-white)", border: "1px solid var(--text-muted)" }}
+          style={{ background: "var(--color-surface)", border: "1px solid var(--color-border)" }}
         >
           <option value="PUBLIC">Public</option>
           <option value="CONTRACTOR">Contractor</option>
@@ -118,8 +118,8 @@ export default function SignupPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full text-white p-2 rounded font-medium"
-          style={{ background: "var(--accent-blue)" }}
+          className="w-full p-2 rounded font-medium text-[var(--btn-primary-text)]"
+          style={{ background: "var(--color-accent)" }}
         >
           {loading ? "Creating..." : "Sign Up"}
         </button>

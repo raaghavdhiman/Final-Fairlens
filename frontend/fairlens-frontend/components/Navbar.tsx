@@ -62,7 +62,7 @@ export default function Navbar() {
 
   return (
     <header
-      style={{ background: "var(--navy-authority)", boxShadow: "0 1px 0 rgba(15,23,42,0.06)" }}
+      style={{ background: "#2f4550", boxShadow: "0 1px 0 rgba(15,23,42,0.06)" }}
       className="w-full"
     >
       <div className="max-w-[var(--app-max-width)] mx-auto flex items-center" style={{ height: 76 }}>
@@ -73,7 +73,7 @@ export default function Navbar() {
               <IconShield />
             </div>
             <div className="flex flex-col">
-              <span style={{ color: "var(--surface-white)" }} className="text-2xl brand-title">FairLens</span>
+              <span style={{ color: "#cfc0bd" }} className="text-2xl brand-title">FairLens</span>
               <span className="brand-sub">Public Transparency Platform</span>
             </div>
           </Link>
@@ -110,12 +110,12 @@ export default function Navbar() {
             {role === "CONTRACTOR" && (
               <>
                 <li>
-                  <Link href="/contractor/tenders" className={`text-white/90 hover:text-white meta ${isActive("/contractor") ? "border-b-2 border-[var(--accent-blue)] pb-2" : "pb-2"}`}>
+                  <Link href="/contractor/tenders" style={{ color: "rgba(207,192,189,0.9)" }} className={`hover:text-white meta ${isActive("/contractor") ? "border-b-2 border-[var(--color-accent)] pb-2" : "pb-2"}`}>
                     My Tenders
                   </Link>
                 </li>
                 <li>
-                  <Link href="/contractor/work" className="text-white/90 hover:text-white meta pb-2">
+                  <Link href="/contractor/work" style={{ color: "rgba(207,192,189,0.9)" }} className="hover:text-white meta pb-2">
                     Work
                   </Link>
                 </li>
@@ -125,12 +125,12 @@ export default function Navbar() {
             {role === "GOVERNMENT" && (
               <>
                 <li>
-                  <Link href="/gov/tenders" className={`text-white/90 hover:text-white meta ${isActive("/gov/tenders") ? "border-b-2 border-[var(--accent-blue)] pb-2" : "pb-2"}`}>
+                  <Link href="/gov/tenders" style={{ color: "rgba(207,192,189,0.9)" }} className={`hover:text-white meta ${isActive("/gov/tenders") ? "border-b-2 border-[var(--color-accent)] pb-2" : "pb-2"}`}>
                     My Tenders
                   </Link>
                 </li>
                 <li>
-                  <Link href="/gov/bids" className="text-white/90 hover:text-white meta pb-2">
+                  <Link href="/gov/bids" style={{ color: "rgba(207,192,189,0.9)" }} className="hover:text-white meta pb-2">
                     Bids
                   </Link>
                 </li>
@@ -186,13 +186,13 @@ export default function Navbar() {
                 )}
 
                 {role === "CONTRACTOR" && (
-                  <Link href="/contractor/profile" className="px-3 py-1 text-white/95 meta">
+                  <Link href="/contractor/profile" style={{ color: "rgba(207,192,189,0.95)" }} className="px-3 py-1 meta">
                     Contractor
                   </Link>
                 )}
 
                 {role === "GOVERNMENT" && (
-                  <Link href="/gov" className="px-3 py-1 text-white/95 meta">
+                  <Link href="/gov" style={{ color: "rgba(207,192,189,0.95)" }} className="px-3 py-1 meta">
                     Government
                   </Link>
                 )}

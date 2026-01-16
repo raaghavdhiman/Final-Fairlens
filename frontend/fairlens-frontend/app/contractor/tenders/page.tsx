@@ -83,7 +83,7 @@ export default function ContractorTendersPage() {
       )}
 
       {tenders.length === 0 && (
-        <p className="text-gray-400">No tenders available.</p>
+        <p className="text-[var(--color-border)]">No tenders available.</p>
       )}
 
       <div className="space-y-4">
@@ -95,7 +95,7 @@ export default function ContractorTendersPage() {
               <div className="flex justify-between items-start">
                 <div>
                   <h2 className="font-semibold text-lg">{t.title}</h2>
-                  <p className="text-sm text-gray-500 mt-1">
+                  <p className="text-sm text-[var(--color-border)] mt-1">
                     {t.description}
                   </p>
                 </div>
@@ -113,7 +113,7 @@ export default function ContractorTendersPage() {
                 {canBid ? (
                   <Link
                     href={`/contractor/tenders/${t.id}/bid`}
-                    className="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700"
+                    className="px-3 py-1 text-sm bg-[var(--color-accent)] text-[var(--btn-primary-text)] rounded hover:bg-[#1ae8ff]"
                   >
                     Place Bid
                   </Link>
