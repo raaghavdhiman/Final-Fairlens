@@ -16,6 +16,7 @@ export default function PlaceBidPage() {
   const router = useRouter();
 
   const [tender, setTender] = useState<any>(null);
+  const [user, setUser] = useState<any>(null);
   const [amount, setAmount] = useState("");
   const [proposal, setProposal] = useState("");
   const [loading, setLoading] = useState(true);
@@ -24,16 +25,29 @@ export default function PlaceBidPage() {
 
   useEffect(() => {
     if (!id) return;
-    fetchTender();
+    fetchData();
   }, [id]);
 
-  async function fetchTender() {
+  async function fetchData() {
+    const token = localStorage.getItem("token");
+
     try {
-      const res = await fetch(`${API_URL}/tenders/${id}`);
-      const data = await res.json();
-      setTender(data);
+      const [tenderRes, userRes] = await Promise.all([
+        fetch(`${API_URL}/tenders/${id}`),
+        fetch(`${API_URL}/users/me`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }),
+      ]);
+
+      const tenderData = await tenderRes.json();
+      const userData = await userRes.json();
+
+      setTender(tenderData);
+      setUser(userData);
     } catch {
-      setError("Failed to load tender");
+      setError("Failed to load data");
     } finally {
       setLoading(false);
     }
@@ -81,6 +95,9 @@ export default function PlaceBidPage() {
     return <div className="p-6">Tender not found</div>;
   }
 
+  const hasWallet = Boolean(user?.walletAddress);
+  const isVerified = Boolean(user?.contractorHash);
+
   return (
     <div className="p-6 max-w-3xl mx-auto space-y-4 compact-vertical">
       <h1 className="text-2xl font-semibold title-strong">Place Bid</h1>
@@ -108,7 +125,13 @@ export default function PlaceBidPage() {
         {error && <p className="text-red-500 text-sm">{error}</p>}
 
         <div className="flex justify-end">
-          <button onClick={submitBid} disabled={submitting} className="px-3 py-2 bg-blue-600 rounded disabled:opacity-50">{submitting ? "Submitting..." : "Submit Bid"}</button>
+          <button
+            onClick={submitBid}
+            disabled={submitting || !isVerified}
+            className={submitting ? "btn-disabled" : "btn-primary-action"}
+          >
+            {submitting ? "Submitting..." : !hasWallet ? "Link wallet to continue" : !isVerified ? "Verification pending" : "Submit Bid"}
+          </button>
         </div>
       </Card>
     </div>

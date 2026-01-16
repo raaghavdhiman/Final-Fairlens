@@ -89,7 +89,7 @@ export default function GovTenderBidsPage() {
 
           <div className="mt-3 border-t pt-3 flex justify-end gap-2">
             {!b.isAccepted && (
-              <button onClick={() => onAwardClick(b.id)} className="px-3 py-1 text-sm bg-green-600 text-white rounded">Award Bid</button>
+              <button onClick={() => onAwardClick(b.id)} className="btn-secondary">Award Bid</button>
             )}
           </div>
         </Card>

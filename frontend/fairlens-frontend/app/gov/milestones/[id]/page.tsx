@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { requireRole } from "@/lib/requireRole";
-import { ethers } from "ethers";
+
 import MoneyAmount from "@/components/MoneyAmount";
 import StatusBadge from "@/components/StatusBadge";
 import Card from "@/components/Card";
@@ -24,8 +24,7 @@ export default function GovMilestonesPage() {
   const [dueDate, setDueDate] = useState("");
   const [penaltyRate, setPenaltyRate] = useState("");
 
-  const [verifyingTx, setVerifyingTx] = useState<string | null>(null);
-  const [verifiedTxs, setVerifiedTxs] = useState<Record<string, boolean>>({});
+
 
   useEffect(() => {
     if (!id) return;
@@ -97,40 +96,7 @@ export default function GovMilestonesPage() {
     fetchMilestones();
   }
 
-  // 🔒 SAFE BLOCKCHAIN VERIFICATION
-  async function verifyOnChain(txHash: string | null, milestoneId: string) {
-    if (!txHash) {
-      alert("No blockchain transaction hash available for this payment.");
-      return;
-    }
 
-    try {
-      setVerifyingTx(milestoneId);
-
-      const provider = new ethers.JsonRpcProvider(SEPOLIA_RPC);
-      const receipt = await provider.getTransactionReceipt(txHash);
-
-      if (!receipt) {
-        alert("Transaction not yet confirmed on blockchain.");
-        return;
-      }
-
-      if (receipt.status !== 1) {
-        alert("Blockchain transaction failed.");
-        return;
-      }
-
-      setVerifiedTxs((prev) => ({
-        ...prev,
-        [milestoneId]: true,
-      }));
-    } catch (err) {
-      console.error(err);
-      alert("Failed to verify on blockchain");
-    } finally {
-      setVerifyingTx(null);
-    }
-  }
 
   if (loading) {
     return <div className="p-6">Loading milestones...</div>;
@@ -175,7 +141,7 @@ export default function GovMilestonesPage() {
         />
 
         <div className="flex justify-end">
-          <button onClick={createMilestone} className="px-3 py-2 bg-blue-600 rounded">Add Milestone</button>
+          <button onClick={createMilestone} className="btn-primary-action">Add Milestone</button>
         </div>
       </Card>
 
@@ -187,18 +153,25 @@ export default function GovMilestonesPage() {
 
           <div className="mt-3 border-t pt-3 flex justify-end items-center gap-2">
             {m.status === "COMPLETED" && !m.verifiedAt && (
-              <button onClick={() => verifyMilestone(m.id)} className="px-3 py-1 text-sm bg-green-600 rounded">Verify Work</button>
+              <button onClick={() => verifyMilestone(m.id)} className="btn-secondary">Verify Work</button>
             )}
 
             {m.status === "COMPLETED" && m.verifiedAt && !m.paidAt && (
-              <button onClick={() => releasePayment(m.id)} className="px-3 py-1 text-sm bg-purple-600 rounded">Release Payment</button>
+              <button onClick={() => releasePayment(m.id)} className="btn-warning">Release Payment</button>
             )}
 
             {m.paidAt && (
-              !verifiedTxs[m.id] ? (
-                <button onClick={() => verifyOnChain(m.paymentTxHash, m.id)} disabled={verifyingTx === m.id} className="px-3 py-1 text-sm border border-gray-300 rounded">{verifyingTx === m.id ? "Verifying..." : "Verify on Blockchain"}</button>
+              m.paymentTxHash ? (
+                <a
+                  href={`https://sepolia.etherscan.io/tx/${m.paymentTxHash}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-green-500 text-sm hover:underline"
+                >
+                  Verified on-chain ↗
+                </a>
               ) : (
-                <p className="text-green-400 text-sm">🔗 Verified on-chain</p>
+                <p className="text-gray-500 text-sm">Not yet verified on-chain</p>
               )
             )}
           </div>

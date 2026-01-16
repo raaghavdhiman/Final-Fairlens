@@ -69,9 +69,8 @@ export default function ContractorTendersPage() {
     return <div className="p-6">Failed to load contractor</div>;
   }
 
-  const isVerified =
-    Boolean(contractor.contractorHash) &&
-    Boolean(contractor.walletAddress);
+  const isVerified = Boolean(contractor.contractorHash);
+  const hasWallet = Boolean(contractor.walletAddress);
 
   return (
     <div className="p-6 max-w-6xl mx-auto space-y-4 compact-vertical">
@@ -79,7 +78,7 @@ export default function ContractorTendersPage() {
 
       {!isVerified && (
         <Card className="p-4 border-yellow-300 bg-yellow-50 text-yellow-800">
-          ⚠️ You must be blockchain-verified to place bids.
+          {hasWallet ? "Wallet linked. Awaiting government verification." : "⚠️ Link your wallet to start the verification process."}
         </Card>
       )}
 
@@ -130,7 +129,7 @@ export default function ContractorTendersPage() {
                   >
                     {t.status !== "OPEN"
                       ? "Bidding Closed"
-                      : "Verification Required"}
+                      : hasWallet ? "Verification Pending" : "Link Wallet"}
                   </span>
                 )}
               </div>

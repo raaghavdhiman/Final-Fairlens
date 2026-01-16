@@ -166,4 +166,41 @@ button:focus-visible {
 .how-warning .icon { color: var(--warning); margin-right: 0.45rem; }
 
 
+/* Centralized button styles */
+.btn-primary-action {
+  background: #2563EB;
+  color: #FFFFFF;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: background-color 180ms ease;
+}
+.btn-primary-action:hover { background: #1D4ED8; }
+
+.btn-secondary {
+  background: #E0F2FE;
+  color: #0369A1;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: background-color 180ms ease;
+}
+.btn-secondary:hover { background: #BAE6FD; }
+
+.btn-warning {
+  background: #FEF3C7;
+  color: #D97706;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: background-color 180ms ease;
+}
+.btn-warning:hover { background: #FDE68A; }
+
+.btn-disabled {
+  background: #F3F4F6;
+  color: #9CA3AF;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: not-allowed;
+}
+
+
 

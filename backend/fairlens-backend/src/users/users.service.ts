@@ -145,4 +145,41 @@ export class UsersService {
       network: 'sepolia',
     };
   }
+  async linkWallet(userId: string, walletAddress: string) {
+  if (!walletAddress) {
+    throw new BadRequestException('Wallet address required');
+  }
+
+  if (!/^0x[a-fA-F0-9]{40}$/.test(walletAddress)) {
+    throw new BadRequestException('Invalid Ethereum address');
+  }
+
+  const user = await this.prisma.user.findUnique({
+    where: { id: userId },
+  });
+
+  if (!user) {
+    throw new BadRequestException('User not found');
+  }
+
+  if (user.role !== Role.CONTRACTOR) {
+    throw new BadRequestException('Only contractors can link wallets');
+  }
+
+  if (user.walletAddress) {
+    throw new BadRequestException('Wallet already linked');
+  }
+
+  return this.prisma.user.update({
+    where: { id: userId },
+    data: {
+      walletAddress: walletAddress.toLowerCase(),
+    },
+    select: {
+      id: true,
+      walletAddress: true,
+    },
+  });
+}
+
 }

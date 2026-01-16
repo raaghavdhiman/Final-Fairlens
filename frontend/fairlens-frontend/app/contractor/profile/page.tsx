@@ -11,6 +11,11 @@ export default function ContractorProfilePage() {
 
   const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [walletInput, setWalletInput] = useState("");
+  const [isValid, setIsValid] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [message, setMessage] = useState<string | null>(null);
+  const [messageType, setMessageType] = useState<"success" | "error" | null>(null);
 
   useEffect(() => {
     async function fetchProfile() {
@@ -35,6 +40,56 @@ export default function ContractorProfilePage() {
     fetchProfile();
   }, []);
 
+  const handleWalletChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setWalletInput(val);
+    setIsValid(/^0x[a-fA-F0-9]{40}$/.test(val));
+    setMessage(null);
+  };
+
+  const handleSubmit = async () => {
+    setSubmitting(true);
+    setMessage(null);
+
+    try {
+      const token = localStorage.getItem("token");
+
+      // ✅ FIX: correct endpoint
+      const res = await fetch(`${API_URL}/users/me/wallet`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ walletAddress: walletInput }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to link wallet");
+      }
+
+      // Re-fetch updated profile
+      const profileRes = await fetch(`${API_URL}/users/me`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const updatedUser = await profileRes.json();
+      setUser(updatedUser);
+
+      setMessage("Wallet linked successfully!");
+      setMessageType("success");
+      setWalletInput("");
+    } catch (err) {
+      console.error(err);
+      setMessage("Failed to link wallet. Please try again.");
+      setMessageType("error");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   if (loading) {
     return <div className="p-6">Loading profile...</div>;
   }
@@ -43,6 +98,7 @@ export default function ContractorProfilePage() {
     return <div className="p-6">Profile not found</div>;
   }
 
+  const hasWallet = Boolean(user.walletAddress);
   const isVerified = Boolean(user.contractorHash);
 
   return (
@@ -64,14 +120,76 @@ export default function ContractorProfilePage() {
 
         {isVerified ? (
           <>
-            <p className="text-green-500 font-medium">✅ Verified on Blockchain</p>
+            <p className="text-green-500 font-medium">✅ Verified on blockchain</p>
 
-            <p className="text-sm text-gray-400 break-all"><span className="font-medium text-gray-300">Contractor Hash:</span> {user.contractorHash}</p>
+            <p className="text-sm text-gray-400 break-all">
+              <span className="font-medium text-gray-300">Contractor Hash:</span>{" "}
+              {user.contractorHash}
+            </p>
 
-            <p className="text-sm text-gray-400"><span className="font-medium text-gray-300">Verified At:</span> {new Date(user.verifiedAt).toLocaleString()}</p>
+            <p className="text-sm text-gray-400">
+              <span className="font-medium text-gray-300">Verified At:</span>{" "}
+              {new Date(user.verifiedAt).toLocaleString()}
+            </p>
+          </>
+        ) : hasWallet ? (
+          <p className="text-yellow-500 font-medium">
+            Wallet linked. Awaiting government verification.
+          </p>
+        ) : (
+          <p className="text-yellow-500">
+            ⚠️ Not verified yet. You cannot bid until a government authority verifies you.
+          </p>
+        )}
+      </Card>
+
+      {/* WALLET ADDRESS */}
+      <Card className="space-y-3">
+        <h2 className="text-xl font-semibold">Wallet Address</h2>
+
+        {user.walletAddress ? (
+          <>
+            <p>
+              <span className="font-medium">Wallet Address:</span>{" "}
+              {user.walletAddress}
+            </p>
+            <p className="text-green-500 text-sm">Wallet linked</p>
+            <p className="text-sm text-gray-500">
+              Wallet addresses are locked once linked.
+            </p>
           </>
         ) : (
-          <p className="text-yellow-500">⚠️ Not verified yet. You cannot bid until a government authority verifies you.</p>
+          <>
+            <p className="text-sm text-gray-600">
+              Enter your Ethereum wallet address. Once linked, it cannot be changed.
+            </p>
+
+            <input
+              type="text"
+              value={walletInput}
+              onChange={handleWalletChange}
+              placeholder="0x..."
+              className="w-full p-2 border border-gray-300 rounded"
+            />
+
+            <button
+              onClick={handleSubmit}
+              disabled={!isValid || submitting}
+              className={submitting ? "btn-disabled" : "btn-primary-action"}
+            >
+              {submitting ? "Linking..." : "Link Wallet"}
+            </button>
+
+            {message && (
+              <p
+                className={`text-sm ${
+                  messageType === "success" ? "text-green-500" : "text-red-500"
+                }`}
+              >
+                {message}
+              </p>
+            )}
+          </>
         )}
       </Card>
     </div>

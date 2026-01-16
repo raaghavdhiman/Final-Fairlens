@@ -10,6 +10,7 @@ export default function StatusBadge({ status }: { status: string }) {
     COMPLETED: { bg: "var(--success)", color: "#ffffff" },
     DRAFT: { bg: "var(--warning)", color: "#ffffff" },
     PENDING: { bg: "var(--warning)", color: "#0F172A" },
+    PENDING_VERIFICATION: { bg: "var(--warning)", color: "#0F172A" },
     IN_PROGRESS: { bg: "var(--accent-blue)", color: "#ffffff" },
     DELAYED: { bg: "var(--error)", color: "#ffffff" },
     CLOSED: { bg: "#E6EEF6", color: "var(--text-secondary)" },

@@ -4,6 +4,7 @@ import {
   Param,
   Patch,
   UseGuards,
+  Body,
   Req,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -57,4 +58,11 @@ export class UsersController {
       req.user.id,
     );
   }
+  @Patch('me/wallet')
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(Role.CONTRACTOR)
+linkWallet(@Req() req, @Body('walletAddress') walletAddress: string) {
+  return this.usersService.linkWallet(req.user.id, walletAddress);
+}
+
 }

@@ -91,11 +91,11 @@ export default function ContractorMilestonesPage() {
 
           <div className="mt-3 border-t pt-3 flex justify-end items-center gap-2">
             {m.status === "PENDING" && (
-              <button onClick={() => startWork(m.id)} className="px-3 py-1 text-sm bg-blue-600 rounded">Start Work</button>
+              <button onClick={() => startWork(m.id)} className="btn-primary-action">Start Work</button>
             )}
 
             {m.status === "IN_PROGRESS" && (
-              <button onClick={() => submitWork(m.id)} className="px-3 py-1 text-sm bg-yellow-600 rounded">Submit Work</button>
+              <button onClick={() => submitWork(m.id)} className="btn-warning">Submit Work</button>
             )}
 
             {m.status === "COMPLETED" && !m.paidAt && (
@@ -105,7 +105,18 @@ export default function ContractorMilestonesPage() {
             {m.paidAt && (
               <div className="text-green-500 text-sm space-y-1 text-right">
                 <div>✅ Paid</div>
-                {m.paymentTxHash && <div className="text-gray-400">Tx: {m.paymentTxHash.slice(0, 12)}...</div>}
+                {m.paymentTxHash ? (
+                  <a
+                    href={`https://sepolia.etherscan.io/tx/${m.paymentTxHash}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-green-500 hover:underline"
+                  >
+                    Tx: {m.paymentTxHash.slice(0, 12)}...
+                  </a>
+                ) : (
+                  <div className="text-gray-400">Tx: Not available</div>
+                )}
               </div>
             )}
           </div>
