@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { requireRole } from "@/lib/requireRole";
+import Card from "@/components/Card";
 
 const API_URL = "http://localhost:3001";
 

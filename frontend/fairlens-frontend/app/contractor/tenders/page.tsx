@@ -42,13 +42,20 @@ export default function ContractorTendersPage() {
     try {
       const [tendersRes, meRes] = await Promise.all([
         fetch(`${API_URL}/tenders`),
-              <div className="mt-3 border-t pt-3 flex justify-end">
-                {canBid ? (
-                  <Link href={`/contractor/tenders/${t.id}/bid`} className="inline-block px-3 py-1 text-sm bg-blue-600 rounded hover:bg-blue-700">Place Bid</Link>
-                ) : (
-                  <button disabled className="px-3 py-1 text-sm bg-gray-700 text-gray-400 rounded cursor-not-allowed">{t.status !== "OPEN" ? "Bidding Closed" : "Verification Required"}</button>
-                )}
-              </div>
+        fetch(`${API_URL}/users/me`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }),
+      ]);
+
+      const tendersData = await tendersRes.json();
+      const meData = await meRes.json();
+
+      setTenders(tendersData);
+      setContractor(meData);
+    } catch (err) {
+      console.error("Failed to load tenders", err);
     } finally {
       setLoading(false);
     }
@@ -63,14 +70,15 @@ export default function ContractorTendersPage() {
   }
 
   const isVerified =
-    contractor.contractorHash && contractor.walletAddress;
+    Boolean(contractor.contractorHash) &&
+    Boolean(contractor.walletAddress);
 
   return (
     <div className="p-6 max-w-6xl mx-auto space-y-4 compact-vertical">
       <h1 className="text-2xl font-semibold title-strong">Public Tenders</h1>
 
       {!isVerified && (
-        <Card className="p-4 border-yellow-600 text-yellow-400">
+        <Card className="p-4 border-yellow-300 bg-yellow-50 text-yellow-800">
           ⚠️ You must be blockchain-verified to place bids.
         </Card>
       )}
@@ -81,30 +89,51 @@ export default function ContractorTendersPage() {
 
       <div className="space-y-4">
         {tenders.map((t) => {
-          const canBid =
-            isVerified && t.status === "OPEN";
+          const canBid = isVerified && t.status === "OPEN";
 
-            return (
-            <Card key={t.id} className="space-y-2">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h2 className="font-semibold text-[var(--text-primary)]">{t.title}</h2>
-                      <p className="text-sm muted mt-1">{t.description}</p>
-                    </div>
+          return (
+            <Card key={t.id} className="space-y-3">
+              <div className="flex justify-between items-start">
+                <div>
+                  <h2 className="font-semibold text-lg">{t.title}</h2>
+                  <p className="text-sm text-gray-500 mt-1">
+                    {t.description}
+                  </p>
+                </div>
 
-                    <div className="text-right">
-                      <StatusBadge status={t.status} />
-                      <div className="text-sm mt-2">
-                        <MoneyAmount eth={t.budget} />
-                      </div>
-                    </div>
+                <div className="text-right">
+                  <StatusBadge status={t.status} />
+                  <div className="text-sm mt-2">
+                    <MoneyAmount eth={t.budget} />
                   </div>
+                </div>
+              </div>
 
-              {canBid ? (
-                <Link href={`/contractor/tenders/${t.id}/bid`} className="inline-block px-4 py-1 bg-blue-600 rounded hover:bg-blue-700">Place Bid</Link>
-              ) : (
-                <button disabled className="px-4 py-1 bg-gray-700 text-gray-400 rounded cursor-not-allowed">{t.status !== "OPEN" ? "Bidding Closed" : "Verification Required"}</button>
-              )}
+              {/* ACTION ROW */}
+              <div className="flex justify-end pt-2 border-t">
+                {canBid ? (
+                  <Link
+                    href={`/contractor/tenders/${t.id}/bid`}
+                    className="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700"
+                  >
+                    Place Bid
+                  </Link>
+                ) : (
+                  <span
+                    className={`px-3 py-1 text-sm rounded-full font-medium
+                      ${
+                        t.status !== "OPEN"
+                          ? "bg-red-50 text-red-700 border border-red-200"
+                          : "bg-yellow-50 text-yellow-700 border border-yellow-200"
+                      }
+                    `}
+                  >
+                    {t.status !== "OPEN"
+                      ? "Bidding Closed"
+                      : "Verification Required"}
+                  </span>
+                )}
+              </div>
             </Card>
           );
         })}
